@@ -1,16 +1,16 @@
 package br.com.procedureauthorization.models;
 
-public class Procedure {
+public class ProcedureRules {
     private Integer id;
     private String code;
     private Integer age;
     private String gender;
     private Boolean isAuthorized;
 
-    public Procedure() {
+    public ProcedureRules() {
     }
 
-    public Procedure(String code, Integer age, String gender, Boolean isAuthorized) {
+    public ProcedureRules(String code, Integer age, String gender, Boolean isAuthorized) {
         this.code = code;
         this.age = age;
         this.gender = gender;

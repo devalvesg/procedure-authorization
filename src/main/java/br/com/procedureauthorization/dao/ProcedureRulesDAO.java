@@ -1,19 +1,19 @@
 package br.com.procedureauthorization.dao;
 import br.com.procedureauthorization.config.DatabaseConfig;
-import br.com.procedureauthorization.models.Procedure;
+import br.com.procedureauthorization.models.ProcedureRules;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-public class ProcedureDAO {
+public class ProcedureRulesDAO {
     private final DatabaseConfig dbConfig;
 
-    public ProcedureDAO(DatabaseConfig dbConfig) {
+    public ProcedureRulesDAO(DatabaseConfig dbConfig) {
         this.dbConfig = dbConfig;
     }
 
-    public List<Procedure> findAll() throws SQLException {
-        List<Procedure> procedures = new ArrayList<>();
+    public List<ProcedureRules> findAll() throws SQLException {
+        List<ProcedureRules> procedureRules = new ArrayList<>();
         String sql = "SELECT id, code, age, gender, isAuthorized FROM procedure ORDER BY id";
 
         try (Connection conn = dbConfig.getConnection();
@@ -21,35 +21,35 @@ public class ProcedureDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                procedures.add(mapResultSetToProcedure(rs));
+                procedureRules.add(mapResultSetToProcedure(rs));
             }
         }
 
-        return procedures;
+        return procedureRules;
     }
     
-    public void insert(Procedure procedure) throws SQLException {
+    public void insert(ProcedureRules procedureRules) throws SQLException {
         String sql = "INSERT INTO procedure(code, age, gender, isAuthorized) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, procedure.getCode());
-            ps.setInt(2, procedure.getAge() != null ? procedure.getAge() : 0);
-            ps.setString(3, procedure.getGender() != null ? procedure.getGender() : "");
-            ps.setBoolean(4, procedure.getIsAuthorized() != null ? procedure.getIsAuthorized() : false);
+            ps.setString(1, procedureRules.getCode());
+            ps.setInt(2, procedureRules.getAge() != null ? procedureRules.getAge() : 0);
+            ps.setString(3, procedureRules.getGender() != null ? procedureRules.getGender() : "");
+            ps.setBoolean(4, procedureRules.getIsAuthorized() != null ? procedureRules.getIsAuthorized() : false);
 
             ps.executeUpdate();
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    procedure.setId(generatedKeys.getInt(1));
+                    procedureRules.setId(generatedKeys.getInt(1));
                 }
             }
         }
     }
 
-    public Procedure findById(Integer id) throws SQLException {
+    public ProcedureRules findById(Integer id) throws SQLException {
         String sql = "SELECT id, code, age, gender, isAuthorized FROM procedure WHERE id = ?";
 
         try (Connection conn = dbConfig.getConnection();
@@ -67,8 +67,8 @@ public class ProcedureDAO {
         return null;
     }
 
-    private Procedure mapResultSetToProcedure(ResultSet rs) throws SQLException {
-        Procedure p = new Procedure();
+    private ProcedureRules mapResultSetToProcedure(ResultSet rs) throws SQLException {
+        ProcedureRules p = new ProcedureRules();
         p.setId(rs.getInt("id"));
         p.setCode(rs.getString("code"));
         p.setAge(rs.getInt("age"));
