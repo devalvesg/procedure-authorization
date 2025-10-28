@@ -1,0 +1,29 @@
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=procedure_authorization
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_HOST_AUTH_METHOD=md5
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: procedure_authorization_app
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    environment:
+      - JDBC_URL=jdbc:postgresql://postgres-db:5432/procedure_authorization
+      - JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,address=*:8787,server=y,suspend=n"
+      - JDBC_USER=admin
+      - JDBC_PASS=admin123
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
