@@ -25,39 +25,35 @@
 
     <div class="row g-4 mb-5">
         <div class="col-md-6">
-            <a href="${pageContext.request.contextPath}/authorizations?action=new" class="card-link">
-                <div class="action-card card-primary animate-slide-up" style="animation-delay: 0.1s">
-                    <div class="card-icon">
-                        <i class="bi bi-file-medical"></i>
-                    </div>
-                    <h3 class="card-title">Nova Solicitação</h3>
-                    <p class="card-description">
-                        Solicite autorização para um procedimento médico informando os dados do paciente.
-                    </p>
-                    <div class="card-footer-action">
-                        Criar solicitação
-                        <i class="bi bi-arrow-right ms-2"></i>
-                    </div>
+            <div class="action-card card-primary animate-slide-up" style="animation-delay: 0.1s">
+                <div class="card-icon">
+                    <i class="bi bi-file-medical"></i>
                 </div>
-            </a>
+                <h3 class="card-title">Nova Solicitação</h3>
+                <p class="card-description">
+                    Solicite autorização para um procedimento médico informando os dados do paciente.
+                </p>
+                <a href="${pageContext.request.contextPath}/authorizations?action=new" class="btn btn-card-action">
+                    Criar Solicitação
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <a href="${pageContext.request.contextPath}/procedures" class="card-link">
-                <div class="action-card card-secondary animate-slide-up" style="animation-delay: 0.2s">
-                    <div class="card-icon">
-                        <i class="bi bi-clipboard-check"></i>
-                    </div>
-                    <h3 class="card-title">Regras de Procedimentos</h3>
-                    <p class="card-description">
-                        Consulte as regras e critérios de autorização cadastrados no sistema.
-                    </p>
-                    <div class="card-footer-action">
-                        Ver regras
-                        <i class="bi bi-arrow-right ms-2"></i>
-                    </div>
+            <div class="action-card card-secondary animate-slide-up" style="animation-delay: 0.2s">
+                <div class="card-icon">
+                    <i class="bi bi-clipboard-check"></i>
                 </div>
-            </a>
+                <h3 class="card-title">Regras de Procedimentos</h3>
+                <p class="card-description">
+                    Consulte as regras e critérios de autorização cadastrados no sistema.
+                </p>
+                <a href="${pageContext.request.contextPath}/procedures" class="btn btn-card-action">
+                    Ver Regras
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 

@@ -84,7 +84,9 @@ public class AuthorizationRequestDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToAuthorizationRequest(rs);
+                    String status = Boolean.parseBoolean(rs.getString("is_authorized")) ? "APROVADO" : "NEGADO";
+                    authorizationRequest.setStatus(status);
+                    return authorizationRequest;
                 }
             }
         }
