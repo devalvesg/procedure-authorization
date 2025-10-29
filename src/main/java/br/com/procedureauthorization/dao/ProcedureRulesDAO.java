@@ -1,10 +1,12 @@
 package br.com.procedureauthorization.dao;
+
 import br.com.procedureauthorization.config.DatabaseConfig;
 import br.com.procedureauthorization.models.ProcedureRules;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 public class ProcedureRulesDAO {
     private final DatabaseConfig dbConfig;
 
@@ -14,7 +16,7 @@ public class ProcedureRulesDAO {
 
     public List<ProcedureRules> findAll() throws SQLException {
         List<ProcedureRules> procedureRules = new ArrayList<>();
-        String sql = "SELECT id, code, age, gender, isAuthorized FROM procedure ORDER BY id";
+        String sql = "SELECT id, code, age, gender, isAuthorized FROM rule_procedure ORDER BY id";
 
         try (Connection conn = dbConfig.getConnection();
              Statement stmt = conn.createStatement();
@@ -27,9 +29,9 @@ public class ProcedureRulesDAO {
 
         return procedureRules;
     }
-    
+
     public void insert(ProcedureRules procedureRules) throws SQLException {
-        String sql = "INSERT INTO procedure(code, age, gender, isAuthorized) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO rule_procedure(code, age, gender, isAuthorized) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -50,7 +52,7 @@ public class ProcedureRulesDAO {
     }
 
     public ProcedureRules findById(Integer id) throws SQLException {
-        String sql = "SELECT id, code, age, gender, isAuthorized FROM procedure WHERE id = ?";
+        String sql = "SELECT * FROM rule_procedure WHERE id = ?";
 
         try (Connection conn = dbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -65,6 +67,24 @@ public class ProcedureRulesDAO {
         }
 
         return null;
+    }
+
+    public boolean existsProcedure(ProcedureRules procedureRule) {
+        String sql = "SELECT 1 FROM rule_procedure WHERE procedure_code = ? AND age = ? AND gender = ?";
+
+        try (Connection conn = dbConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, procedureRule.getCode());
+            ps.setInt(2, procedureRule.getAge());
+            ps.setString(3, procedureRule.getGender());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     private ProcedureRules mapResultSetToProcedure(ResultSet rs) throws SQLException {
