@@ -2,6 +2,7 @@ package br.com.procedureauthorization.services;
 
 import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
 import br.com.procedureauthorization.dao.ProcedureRulesDAO;
+import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.models.ProcedureRules;
 
@@ -20,48 +21,48 @@ public class AuthorizationService {
         return authorizationRequestDAO.findAll();
     }
 
-    public void createAuthorization(AuthorizationRequest authorization) throws SQLException, ValidationException {
+    public void createAuthorization(AuthorizationRequest authorization) throws SQLException, BusinessException {
         validateAuthorization(authorization);
         authorization.setStatus(validateAuthorizationRulesStatus(authorization));
         authorizationRequestDAO.insert(authorization);
     }
 
-    public AuthorizationRequest findById(Integer id) throws SQLException {
-        return authorizationRequestDAO.findById(id);
+    public AuthorizationRequest findById(Integer id) throws SQLException, BusinessException {
+        var authorization = authorizationRequestDAO.findById(id);
+
+        if (authorization == null) {
+            throw new BusinessException("Nenhuma autorização foi encontrada");
+        }
+
+        return authorization;
     }
 
-    public String validateAuthorizationRulesStatus(AuthorizationRequest authorization) throws SQLException, ValidationException {
+    public String validateAuthorizationRulesStatus(AuthorizationRequest authorization) throws SQLException, BusinessException {
         if (authorizationRequestDAO.validateRules(authorization) == null) {
-            throw new ValidationException("Procedimento não autorizado: Regra de Procedimento não encontrada");
+            throw new BusinessException("Procedimento não autorizado: Regra de Procedimento não encontrada");
         };
 
        return authorization.getStatus();
     }
 
-    private void validateAuthorization(AuthorizationRequest authorization) throws ValidationException {
+    private void validateAuthorization(AuthorizationRequest authorization) throws BusinessException {
         if (authorization.getProcedureCode() == null || authorization.getProcedureCode().isBlank()) {
-            throw new ValidationException("O código do procedimento é obrigatório");
+            throw new BusinessException("O código do procedimento é obrigatório");
         }
 
         if (authorization.getProcedureCode().length() > 4) {
-            throw new ValidationException("O código do procedimento não pode ter mais de 4 caracteres");
+            throw new BusinessException("O código do procedimento não pode ter mais de 4 caracteres");
         }
 
         if (authorization.getPatientAge() != null && authorization.getPatientAge() < 0) {
-            throw new ValidationException("A idade do paciente não pode ser negativa");
+            throw new BusinessException("A idade do paciente não pode ser negativa");
         }
 
         if (authorization.getPatientGender() != null && !authorization.getPatientGender().isEmpty()) {
             String gender = authorization.getPatientGender().toUpperCase();
             if (!gender.equals("M") && !gender.equals("F")) {
-                throw new ValidationException("Sexo do paciente deve ser M ou F");
+                throw new BusinessException("Sexo do paciente deve ser M ou F");
             }
-        }
-    }
-
-    public static class ValidationException extends Exception {
-        public ValidationException(String message) {
-            super(message);
         }
     }
 }

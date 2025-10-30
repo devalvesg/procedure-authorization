@@ -2,8 +2,10 @@ package br.com.procedureauthorization.servlet;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
 import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
+import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.services.AuthorizationService;
+import br.com.procedureauthorization.services.ProcedureService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -45,13 +47,8 @@ public class AuthorizationRequestServlet extends HttpServlet {
                 Integer id = Integer.parseInt(idParam);
                 AuthorizationRequest authorization = authorizationService.findById(id);
 
-                if (authorization != null) {
-                    req.setAttribute("authorization", authorization);
-                    req.getRequestDispatcher("/pages/viewAuthorization.jsp").forward(req, resp);
-                } else {
-                    req.setAttribute("error", "Autorização não encontrada");
-                    req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-                }
+                req.setAttribute("authorization", authorization);
+                req.getRequestDispatcher("/pages/viewAuthorization.jsp").forward(req, resp);
                 return;
             }
 
@@ -59,11 +56,11 @@ public class AuthorizationRequestServlet extends HttpServlet {
             req.setAttribute("authorizations", authorizations);
 
             req.getRequestDispatcher("/pages/listAuthorizations.jsp").forward(req, resp);
+        } catch (BusinessException e) {
+            throw new ServletException(e);
 
-        } catch (Exception e) {
-            log("Erro ao processar requisição", e);
-            req.setAttribute("error", "Erro: " + e.getMessage());
-            req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            throw new ServletException("Erro inesperado", e);
         }
     }
 
@@ -77,17 +74,11 @@ public class AuthorizationRequestServlet extends HttpServlet {
             req.setAttribute("authorization", authorization);
             req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
 
-        } catch (AuthorizationService.ValidationException e) {
-            log("Erro de validação ao criar autorização", e);
-            req.setAttribute("error", e.getMessage());
-            req.setAttribute("authorization", extractAuthorizationFromRequest(req));
-            req.getRequestDispatcher("/pages/formAuthorization.jsp").forward(req, resp);
+        } catch (BusinessException e) {
+            throw new ServletException(e);
 
         } catch (SQLException e) {
-            log("Erro ao criar autorização", e);
-            req.setAttribute("error", "Erro ao salvar autorização: " + e.getMessage());
-            req.setAttribute("authorization", extractAuthorizationFromRequest(req));
-            req.getRequestDispatcher("/pages/formAuthorization.jsp").forward(req, resp);
+            throw new ServletException("Erro inesperado", e);
         }
     }
 
