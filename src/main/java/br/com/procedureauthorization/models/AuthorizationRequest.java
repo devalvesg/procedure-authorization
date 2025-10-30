@@ -1,6 +1,6 @@
 package br.com.procedureauthorization.models;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class AuthorizationRequest {
     private Integer id;
@@ -10,12 +10,12 @@ public class AuthorizationRequest {
     private String patientGender;
     private String justification;
     private String status;
-    private Date requestDate;
+    private LocalDateTime requestDate;
 
     public AuthorizationRequest() {
     }
 
-    public AuthorizationRequest(Integer id, String procedureCode, String patientName, Integer patientAge, String patientGender, String justification, String status, Date requestDate) {
+    public AuthorizationRequest(Integer id, String procedureCode, String patientName, Integer patientAge, String patientGender, String justification, String status, LocalDateTime requestDate) {
         this.id = id;
         this.procedureCode = procedureCode;
         this.patientName = patientName;
@@ -82,11 +82,11 @@ public class AuthorizationRequest {
         this.status = status;
     }
 
-    public Date getRequestDate() {
+    public LocalDateTime getRequestDate() {
         return requestDate;
     }
 
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(LocalDateTime requestDate) {
         this.requestDate = requestDate;
     }
 

@@ -9,12 +9,12 @@
     justify-content: center;
     backdrop-filter: blur(10px);
     border: 3px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%)
 }
 
 .logo-container i {
     font-size: 4rem;
     color: white;
-    background: linear-gradient(135deg, #00401A 0%, #00995D 100%);
 }
 
 .action-card {
@@ -132,6 +132,7 @@
 
 .btn-card-action:active {
     transform: translateY(0);
+    color: white !important;
 }
 
 .btn-card-action i {
