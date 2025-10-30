@@ -40,7 +40,7 @@ public class ProcedureRulesServlet extends HttpServlet {
 
                 if (rule != null) {
                     req.setAttribute("procedureRule", rule);
-                    req.getRequestDispatcher("/pages/viewProcedureRule.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
                 } else {
                     req.setAttribute("error", "Regra de procedimento não encontrada");
                     req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
@@ -50,7 +50,7 @@ public class ProcedureRulesServlet extends HttpServlet {
 
             List<ProcedureRules> rules = procedureService.listAll();
             req.setAttribute("procedureRules", rules);
-            req.getRequestDispatcher("/pages/listProcedureRules.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
             log("ID inválido: " + idParam, e);

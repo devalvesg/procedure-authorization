@@ -18,10 +18,9 @@ public class LiquibaseInitializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("=== Starting Liquibase Migrations ===");
-
-        String jdbcUrl = System.getenv("JDBC_URL");
-        String jdbcUser = System.getenv("JDBC_USER");
-        String jdbcPass = System.getenv("JDBC_PASS");
+        String jdbcUrl = AppConfig.get("jdbc.url");
+        String jdbcUser = AppConfig.get("jdbc.user");
+        String jdbcPass = AppConfig.get("jdbc.password");
 
         try {
             Class.forName("org.postgresql.Driver");

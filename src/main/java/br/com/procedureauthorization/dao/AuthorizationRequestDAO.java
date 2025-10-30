@@ -84,6 +84,7 @@ public class AuthorizationRequestDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    var teste = rs.getString("is_authorized");
                     String status = Boolean.parseBoolean(rs.getString("is_authorized")) ? "APROVADO" : "NEGADO";
                     authorizationRequest.setStatus(status);
                     return authorizationRequest;

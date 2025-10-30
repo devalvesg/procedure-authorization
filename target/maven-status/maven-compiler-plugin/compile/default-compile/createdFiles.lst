@@ -1,0 +1,14 @@
+br\com\procedureauthorization\services\ProcedureService$ValidationException.class
+br\com\procedureauthorization\dao\ProcedureRulesDAO.class
+br\com\procedureauthorization\config\LiquibaseInitializer.class
+br\com\procedureauthorization\services\AuthorizationService.class
+br\com\procedureauthorization\models\ProcedureRules.class
+br\com\procedureauthorization\services\ProcedureService.class
+br\com\procedureauthorization\config\DatabaseConfig.class
+br\com\procedureauthorization\models\AuthorizationRequest.class
+br\com\procedureauthorization\servlet\ProcedureRulesServlet.class
+br\com\procedureauthorization\services\AuthorizationService$ValidationException.class
+br\com\procedureauthorization\servlet\AuthorizationRequestServlet.class
+br\com\procedureauthorization\dao\AuthorizationRequestDAO.class
+br\com\procedureauthorization\servlet\HomeServlet.class
+br\com\procedureauthorization\config\AppConfig.class

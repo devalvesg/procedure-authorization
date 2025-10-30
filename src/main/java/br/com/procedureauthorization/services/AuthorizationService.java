@@ -32,7 +32,7 @@ public class AuthorizationService {
 
     public String validateAuthorizationRulesStatus(AuthorizationRequest authorization) throws SQLException, ValidationException {
         if (authorizationRequestDAO.validateRules(authorization) == null) {
-            throw new ValidationException("Procedimento não autorizado: código não encontrado nas regras de autorização");
+            throw new ValidationException("Procedimento não autorizado: Regra de Procedimento não encontrada");
         };
 
        return authorization.getStatus();
