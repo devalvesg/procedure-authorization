@@ -2,19 +2,14 @@ package br.com.procedureauthorization.servlet;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
 import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
-import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.services.AuthorizationService;
-import br.com.procedureauthorization.services.ProcedureService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "AuthorizationRequestServlet", urlPatterns = {"/authorizations"})
@@ -32,7 +27,7 @@ public class AuthorizationRequestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
 
         String idParam = req.getParameter("id");
         String action = req.getParameter("action");
@@ -56,17 +51,14 @@ public class AuthorizationRequestServlet extends HttpServlet {
             req.setAttribute("authorizations", authorizations);
 
             req.getRequestDispatcher("/pages/listAuthorizations.jsp").forward(req, resp);
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
-
-        } catch (SQLException e) {
-            throw new ServletException("Erro inesperado", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
         try {
             AuthorizationRequest authorization = extractAuthorizationFromRequest(req);
             authorizationService.createAuthorization(authorization);
@@ -74,11 +66,8 @@ public class AuthorizationRequestServlet extends HttpServlet {
             req.setAttribute("authorization", authorization);
             req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
 
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
-
-        } catch (SQLException e) {
-            throw new ServletException("Erro inesperado", e);
         }
     }
 

@@ -24,8 +24,18 @@ public class ExceptionHandlerFilter implements Filter {
 
         try {
             chain.doFilter(request, response);
-        } catch (BusinessException e) {
-            handleBusinessException(httpRequest, httpResponse, e);
+
+        } catch (ServletException e) {
+            Throwable rootCause = e.getRootCause() != null ? e.getRootCause() : e.getCause();
+
+            if (rootCause instanceof BusinessException) {
+                handleBusinessException(httpRequest, httpResponse, (BusinessException) rootCause);
+            } else if (rootCause != null) {
+                handleUnexpectedException(httpRequest, httpResponse, rootCause);
+            } else {
+                handleUnexpectedException(httpRequest, httpResponse, e);
+            }
+
         } catch (Exception e) {
             handleUnexpectedException(httpRequest, httpResponse, e);
         }
@@ -35,48 +45,109 @@ public class ExceptionHandlerFilter implements Filter {
                                          HttpServletResponse response,
                                          BusinessException e) throws ServletException, IOException {
 
-        LOGGER.log(Level.WARNING, "Erro de validação: {0}", e.getMessage());
+        LOGGER.log(Level.WARNING, "⚠️ Erro de validação: {0} - URI: {1} - Method: {2}",
+                new Object[]{e.getMessage(), request.getRequestURI(), request.getMethod()});
 
-        request.setAttribute("errorType", "business");
-        request.setAttribute("errorTitle", "Atenção");
         request.setAttribute("errorMessage", e.getMessage());
-        request.setAttribute("errorIcon", "exclamation-triangle");
-        request.setAttribute("showBackButton", true);
 
-        request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+        String targetPage = determineTargetPage(request);
+        LOGGER.log(Level.INFO, "📄 Redirecionando para: {0}", targetPage);
+
+        request.getRequestDispatcher(targetPage).forward(request, response);
     }
 
     private void handleUnexpectedException(HttpServletRequest request,
                                            HttpServletResponse response,
-                                           Exception e) throws ServletException, IOException {
+                                           Throwable e) throws ServletException, IOException {
 
         String errorId = generateErrorId();
 
         LOGGER.log(Level.SEVERE,
-                String.format("ERRO INESPERADO [ID: %s] - URI: %s", errorId, request.getRequestURI()),
+                String.format("❌ ERRO INESPERADO [ID: %s] - URI: %s - Method: %s - User: %s",
+                        errorId,
+                        request.getRequestURI(),
+                        request.getMethod(),
+                        request.getRemoteUser() != null ? request.getRemoteUser() : "anonymous"),
                 e);
 
-        request.setAttribute("errorType", "unexpected");
-        request.setAttribute("errorTitle", "Erro Inesperado");
-        request.setAttribute("errorMessage", "Um erro inesperado ocorreu. Por favor, contate o suporte informando o código: " + errorId);
+        request.setAttribute("unexpectedError",
+                "Um erro inesperado ocorreu. Por favor, contate o suporte informando o código: " + errorId);
         request.setAttribute("errorId", errorId);
-        request.setAttribute("errorIcon", "x-circle");
-        request.setAttribute("showBackButton", true);
 
-        request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+        String targetPage = determineTargetPage(request);
+        LOGGER.log(Level.INFO, "📄 Redirecionando para: {0}", targetPage);
+
+        request.getRequestDispatcher(targetPage).forward(request, response);
+    }
+
+    private String determineTargetPage(HttpServletRequest request) {
+        String errorPage = (String) request.getAttribute("errorPage");
+        if (errorPage != null && !errorPage.isEmpty()) {
+            LOGGER.log(Level.FINE, "✅ Usando errorPage definido pelo servlet: {0}", errorPage);
+            return errorPage;
+        }
+
+        String referer = request.getHeader("Referer");
+        if (referer != null && !referer.isEmpty()) {
+            try {
+                String contextPath = request.getContextPath();
+                int contextIndex = referer.indexOf(contextPath);
+
+                if (contextIndex != -1) {
+                    String path = referer.substring(contextIndex + contextPath.length());
+
+                    int queryIndex = path.indexOf('?');
+                    if (queryIndex != -1) {
+                        path = path.substring(0, queryIndex);
+                    }
+
+                    if (path.endsWith(".jsp")) {
+                        LOGGER.log(Level.FINE, "✅ Usando Referer: {0}", path);
+                        return path;
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Erro ao processar referer: " + referer, e);
+            }
+        }
+
+        String servletPath = request.getServletPath();
+        String method = request.getMethod();
+
+        LOGGER.log(Level.FINE, "🔍 ServletPath: {0}, Method: {1}", new Object[]{servletPath, method});
+
+        if (servletPath.startsWith("/procedures")) {
+            return "POST".equalsIgnoreCase(method)
+                    ? "/pages/formProcedureRule.jsp"
+                    : "/pages/listProcedureRules.jsp";
+        }
+
+        if (servletPath.startsWith("/authorizations")) {
+            return "/pages/formAuthorization.jsp";
+        }
+
+        if (servletPath.endsWith(".jsp")) {
+            LOGGER.log(Level.FINE, "✅ Mantendo página JSP atual: {0}", servletPath);
+            return servletPath;
+        }
+
+        LOGGER.log(Level.WARNING, "Nenhuma rota reconhecida, redirecionando para index");
+        return "/index.jsp";
     }
 
     private String generateErrorId() {
-        return "ERR-" + System.currentTimeMillis() + "-" + (int)(Math.random() * 1000);
+        return String.format("ERR-%d-%04d",
+                System.currentTimeMillis(),
+                (int) (Math.random() * 10000));
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        LOGGER.info("ExceptionHandlerFilter inicializado");
+        LOGGER.info("ExceptionHandlerFilter inicializado - Sistema de tratamento de exceções ativo");
     }
 
     @Override
     public void destroy() {
-        LOGGER.info("ExceptionHandlerFilter destruído");
+        LOGGER.info("ExceptionHandlerFilter finalizado");
     }
 }

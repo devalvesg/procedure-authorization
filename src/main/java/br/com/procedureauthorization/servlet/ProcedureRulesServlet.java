@@ -2,7 +2,6 @@ package br.com.procedureauthorization.servlet;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
 import br.com.procedureauthorization.dao.ProcedureRulesDAO;
-import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.ProcedureRules;
 import br.com.procedureauthorization.services.ProcedureService;
 import jakarta.servlet.ServletException;
@@ -11,8 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "ProcedureRulesServlet", urlPatterns = {"/procedures"})
@@ -30,7 +27,7 @@ public class ProcedureRulesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
 
         String idParam = req.getParameter("id");
 
@@ -49,17 +46,14 @@ public class ProcedureRulesServlet extends HttpServlet {
             req.setAttribute("procedureRules", rules);
             req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
 
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
-
-        } catch (SQLException e) {
-            throw new ServletException("Erro inesperado", e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
         try {
             ProcedureRules rule = extractProcedureRuleFromRequest(req);
             procedureService.createProcedure(rule);
@@ -67,11 +61,8 @@ public class ProcedureRulesServlet extends HttpServlet {
             req.getSession().setAttribute("successMessage", "Regra de procedimento criada com sucesso!");
             resp.sendRedirect(req.getContextPath() + "/procedures");
 
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
-
-        } catch (SQLException e) {
-            throw new ServletException("Erro inesperado", e);
         }
     }
 

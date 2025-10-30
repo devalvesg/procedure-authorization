@@ -1,10 +1,8 @@
 package br.com.procedureauthorization.services;
 
 import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
-import br.com.procedureauthorization.dao.ProcedureRulesDAO;
 import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.AuthorizationRequest;
-import br.com.procedureauthorization.models.ProcedureRules;
 
 import java.sql.SQLException;
 import java.util.List;
