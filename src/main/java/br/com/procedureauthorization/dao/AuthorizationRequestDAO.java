@@ -16,10 +16,10 @@ public class AuthorizationRequestDAO {
     }
 
     public void insert(AuthorizationRequest authorizationRequest) throws SQLException {
-        String sql = "INSERT INTO authorization_request(procedure_code, patient_name, patient_age, patient_gender, status, justification) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO authorization_request(procedure_code, patient_name, patient_age, patient_gender, status, justification) VALUES (?, ?, ?, ?, ?, ?) RETURNING id, request_date;";
 
         try (Connection conn = dbConfig.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, authorizationRequest.getProcedureCode());
             ps.setString(2, authorizationRequest.getPatientName());
@@ -28,11 +28,10 @@ public class AuthorizationRequestDAO {
             ps.setString(5, authorizationRequest.getStatus() != null ? authorizationRequest.getStatus() : "PENDING");
             ps.setString(6, authorizationRequest.getJustification());
 
-            ps.executeUpdate();
-
-            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    authorizationRequest.setId(generatedKeys.getInt(1));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    authorizationRequest.setId(rs.getInt(1));
+                    authorizationRequest.setRequestDate(rs.getTimestamp(2).toLocalDateTime());
                 }
             }
         }
@@ -84,7 +83,9 @@ public class AuthorizationRequestDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToAuthorizationRequest(rs);
+                    String status = rs.getBoolean("is_authorized") ? "APROVADO" : "NEGADO";
+                    authorizationRequest.setStatus(status);
+                    return authorizationRequest;
                 }
             }
         }
@@ -101,7 +102,7 @@ public class AuthorizationRequestDAO {
         request.setPatientGender(rs.getString("patient_gender"));
         request.setStatus(rs.getString("status"));
         request.setJustification(rs.getString("justification"));
-        request.setRequestDate(rs.getDate("request_date"));
+        request.setRequestDate(rs.getTimestamp("request_date").toLocalDateTime());
         return request;
     }
 }

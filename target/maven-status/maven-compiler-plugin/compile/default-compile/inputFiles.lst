@@ -1,0 +1,12 @@
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\dao\AuthorizationRequestDAO.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\config\DatabaseConfig.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\servlet\AuthorizationRequestServlet.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\config\AppConfig.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\models\AuthorizationRequest.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\config\LiquibaseInitializer.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\models\ProcedureRules.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\servlet\HomeServlet.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\services\AuthorizationService.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\services\ProcedureService.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\dao\ProcedureRulesDAO.java
+C:\Projetos\procedure_authorization\src\main\java\br\com\procedureauthorization\servlet\ProcedureRulesServlet.java

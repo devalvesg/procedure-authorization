@@ -7,19 +7,14 @@ import java.sql.SQLException;
 
 public class DatabaseConfig {
 
-    private static final String DEFAULT_JDBC_URL =
-            "jdbc:postgresql://localhost:5432/procedure_authorization";
-    private static final String DEFAULT_USER = "admin";
-    private static final String DEFAULT_PASS = "admin123";
-
     private final String jdbcUrl;
     private final String jdbcUser;
     private final String jdbcPass;
 
     public DatabaseConfig() {
-        this.jdbcUrl = getEnvOrDefault("JDBC_URL", DEFAULT_JDBC_URL);
-        this.jdbcUser = getEnvOrDefault("JDBC_USER", DEFAULT_USER);
-        this.jdbcPass = getEnvOrDefault("JDBC_PASS", DEFAULT_PASS);
+        this.jdbcUrl = AppConfig.get("jdbc.url");
+        this.jdbcUser = AppConfig.get("jdbc.user");
+        this.jdbcPass = AppConfig.get("jdbc.password");
         loadDriver();
     }
 
@@ -27,7 +22,7 @@ public class DatabaseConfig {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Driver PostgreSQL not found", e);
+            throw new RuntimeException("Driver PostgreSQL não encontrado", e);
         }
     }
 

@@ -16,7 +16,7 @@ public class ProcedureRulesDAO {
 
     public List<ProcedureRules> findAll() throws SQLException {
         List<ProcedureRules> procedureRules = new ArrayList<>();
-        String sql = "SELECT id, code, age, gender, isAuthorized FROM rule_procedure ORDER BY id";
+        String sql = "SELECT id, procedure_code, age, gender, is_authorized FROM rule_procedure ORDER BY id";
 
         try (Connection conn = dbConfig.getConnection();
              Statement stmt = conn.createStatement();
@@ -31,7 +31,7 @@ public class ProcedureRulesDAO {
     }
 
     public void insert(ProcedureRules procedureRules) throws SQLException {
-        String sql = "INSERT INTO rule_procedure(code, age, gender, isAuthorized) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO rule_procedure(procedure_code, age, gender, is_authorized) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -90,10 +90,10 @@ public class ProcedureRulesDAO {
     private ProcedureRules mapResultSetToProcedure(ResultSet rs) throws SQLException {
         ProcedureRules p = new ProcedureRules();
         p.setId(rs.getInt("id"));
-        p.setCode(rs.getString("code"));
+        p.setCode(rs.getString("procedure_code"));
         p.setAge(rs.getInt("age"));
         p.setGender(rs.getString("gender"));
-        p.setIsAuthorized(rs.getBoolean("isAuthorized"));
+        p.setIsAuthorized(rs.getBoolean("is_authorized"));
         return p;
     }
 }

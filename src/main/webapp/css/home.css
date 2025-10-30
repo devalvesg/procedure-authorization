@@ -9,6 +9,7 @@
     justify-content: center;
     backdrop-filter: blur(10px);
     border: 3px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%)
 }
 
 .logo-container i {
@@ -16,23 +17,20 @@
     color: white;
 }
 
-.card-link {
-    text-decoration: none;
-    display: block;
-}
-
 .action-card {
     background: white;
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 3rem 2.5rem;
     text-align: center;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     height: 100%;
-    cursor: pointer;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .action-card::before {
@@ -42,7 +40,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -52,27 +50,23 @@
 }
 
 .action-card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-}
-
-.action-card:active {
-    transform: translateY(-5px) scale(1);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
 }
 
 .card-primary {
-    border-top: 5px solid #667eea;
+    border-top: 5px solid #10ff004f;
 }
 
 .card-secondary {
-    border-top: 5px solid #764ba2;
+    border-top: 5px solid #10ff004f;
 }
 
 .card-icon {
     width: 100px;
     height: 100px;
     margin: 0 auto 1.5rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%);
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -96,25 +90,57 @@
     font-weight: 700;
     color: #2d3748;
     margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 .card-description {
     color: #718096;
     font-size: 1rem;
     line-height: 1.6;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+    position: relative;
+    z-index: 1;
 }
 
-.card-footer-action {
+.btn-card-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: #667eea;
-    font-size: 1.1rem;
+    color: white;
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%);
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
 }
 
-.action-card:hover .card-footer-action {
-    color: #764ba2;
-    transform: translateX(5px);
+.btn-card-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-card-action:active {
+    transform: translateY(0);
+    color: white !important;
+}
+
+.btn-card-action i {
+    transition: transform 0.3s ease;
+}
+
+.btn-card-action:hover i {
+    transform: translateX(4px);
 }
 
 .info-card {
@@ -136,7 +162,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%);
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -184,7 +210,7 @@
 }
 
 .stat-icon.bg-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #00401A 0%, #00995D 100%);
 }
 
 .stat-icon.bg-success {
@@ -197,6 +223,14 @@
 
 .stat-content {
     flex: 1;
+}
+
+.container h1 {
+    color: #2d3748;
+}
+
+.container .description {
+    color: #718096;
 }
 
 .stat-number {
@@ -281,7 +315,7 @@
     }
 
     .action-card {
-        padding: 2rem;
+        padding: 2.5rem 2rem;
     }
 
     .card-icon {
@@ -297,6 +331,15 @@
         font-size: 1.5rem;
     }
 
+    .card-description {
+        font-size: 0.95rem;
+    }
+
+    .btn-card-action {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
     .stat-card {
         flex-direction: column;
         text-align: center;
@@ -304,5 +347,15 @@
 
     .feature-item {
         margin-bottom: 2rem;
+    }
+}
+
+@media (hover: none) {
+    .action-card:hover {
+        transform: none;
+    }
+
+    .btn-card-action:hover {
+        transform: none;
     }
 }

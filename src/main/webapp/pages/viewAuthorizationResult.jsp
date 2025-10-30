@@ -17,10 +17,10 @@
 <body>
 <div class="container">
     <div class="result-card">
-        <div class="result-header ${authorization.status == 'APPROVED' ? 'approved' : 'denied'}">
+        <div class="result-header ${authorization.status == 'APROVADO' ? 'approved' : 'denied'}">
             <div class="result-icon">
                 <c:choose>
-                    <c:when test="${authorization.status == 'APPROVED'}">
+                    <c:when test="${authorization.status == 'APROVADO'}">
                         <i class="bi bi-check-circle-fill"></i>
                     </c:when>
                     <c:otherwise>
@@ -30,7 +30,7 @@
             </div>
             <div class="result-title">
                 <c:choose>
-                    <c:when test="${authorization.status == 'APPROVED'}">
+                    <c:when test="${authorization.status == 'APROVADO'}">
                         AUTORIZAÇÃO APROVADA
                     </c:when>
                     <c:otherwise>
@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <c:if test="${authorization.status == 'DENIED'}">
+            <c:if test="${authorization.status == 'NEGADO'}">
                 <h5 class="mb-3 mt-4">
                     <i class="bi bi-exclamation-triangle me-2 text-danger"></i>
                     Motivo da Negação
@@ -126,7 +126,7 @@
                 </div>
             </c:if>
 
-            <c:if test="${authorization.status == 'APPROVED'}">
+            <c:if test="${authorization.status == 'APROVADO'}">
                 <h5 class="mb-3 mt-4">
                     <i class="bi bi-check-circle me-2 text-success"></i>
                     Confirmação
@@ -178,8 +178,8 @@
                         <br>
                         <small class="text-muted">
                             Status:
-                            <strong class="${authorization.status == 'APPROVED' ? 'text-success' : 'text-danger'}">
-                                ${authorization.status == 'APPROVED' ? 'APROVADO' : 'NEGADO'}
+                            <strong class="${authorization.status == 'APROVADO' ? 'text-success' : 'text-danger'}">
+                                ${authorization.status}
                             </strong>
                         </small>
                     </div>
@@ -194,7 +194,7 @@
                     <button onclick="window.print()" class="btn btn-outline-primary btn-action me-2">
                         <i class="bi bi-printer me-2"></i>Imprimir
                     </button>
-                    <a href="${pageContext.request.contextPath}/authorizations" class="btn btn-primary btn-action">
+                    <a href="${pageContext.request.contextPath}/authorizations?action=new" class="btn btn-primary btn-action">
                         <i class="bi bi-plus-circle me-2"></i>Nova Solicitação
                     </a>
                 </div>
@@ -209,7 +209,7 @@
                 Próximos Passos
             </h6>
             <c:choose>
-                <c:when test="${authorization.status == 'APPROVED'}">
+                <c:when test="${authorization.status == 'APROVADO'}">
                     <ul class="mb-0">
                         <li>Anote o número do protocolo: <strong>#${authorization.id}</strong></li>
                         <li>Imprima este documento para apresentar ao prestador de serviço</li>
