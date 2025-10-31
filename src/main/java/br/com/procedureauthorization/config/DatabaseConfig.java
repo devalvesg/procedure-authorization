@@ -1,11 +1,13 @@
 package br.com.procedureauthorization.config;
 
 
+import br.com.procedureauthorization.config.contract.IDatabaseConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConfig {
+public class DatabaseConfig implements IDatabaseConfig {
 
     private final String jdbcUrl;
     private final String jdbcUser;

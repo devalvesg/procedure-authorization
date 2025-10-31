@@ -1,16 +1,18 @@
 package br.com.procedureauthorization.dao;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
+import br.com.procedureauthorization.config.contract.IDatabaseConfig;
+import br.com.procedureauthorization.dao.contract.IProcedureRulesDAO;
 import br.com.procedureauthorization.models.ProcedureRules;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcedureRulesDAO {
-    private final DatabaseConfig dbConfig;
+public class ProcedureRulesDAO implements IProcedureRulesDAO {
+    private final IDatabaseConfig dbConfig;
 
-    public ProcedureRulesDAO(DatabaseConfig dbConfig) {
+    public ProcedureRulesDAO(IDatabaseConfig dbConfig) {
         this.dbConfig = dbConfig;
     }
 

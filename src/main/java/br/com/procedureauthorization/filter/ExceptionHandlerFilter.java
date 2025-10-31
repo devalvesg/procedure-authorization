@@ -121,7 +121,7 @@ public class ExceptionHandlerFilter implements Filter {
         String servletPath = request.getServletPath();
         String method = request.getMethod();
 
-        LOGGER.log(Level.FINE, "🔍 ServletPath: {0}, Method: {1}", new Object[]{servletPath, method});
+        LOGGER.log(Level.FINE, "ServletPath: {0}, Method: {1}", new Object[]{servletPath, method});
 
         if (servletPath.startsWith("/procedures")) {
             return "POST".equalsIgnoreCase(method)
@@ -134,7 +134,7 @@ public class ExceptionHandlerFilter implements Filter {
         }
 
         if (servletPath.endsWith(".jsp")) {
-            LOGGER.log(Level.FINE, "✅ Mantendo página JSP atual: {0}", servletPath);
+            LOGGER.log(Level.FINE, "Mantendo página JSP atual: {0}", servletPath);
             return servletPath;
         }
 
