@@ -24,7 +24,7 @@
     </div>
 
     <div class="row g-4 mb-5">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="action-card card-primary animate-slide-up" style="animation-delay: 0.1s">
                 <div class="card-icon">
                     <i class="bi bi-file-medical"></i>
@@ -40,7 +40,23 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="action-card card-primary animate-slide-up" style="animation-delay: 0.1s">
+                <div class="card-icon">
+                    <i class="bi bi-card-list"></i>
+                </div>
+                <h3 class="card-title">Lista de Autorizações</h3>
+                <p class="card-description">
+                    Consulte todos os procedimentos de autorizações criados
+                </p>
+                <a href="${pageContext.request.contextPath}/authorizations" class="btn btn-card-action">
+                    Consultar Autorizações
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
             <div class="action-card card-secondary animate-slide-up" style="animation-delay: 0.2s">
                 <div class="card-icon">
                     <i class="bi bi-clipboard-check"></i>

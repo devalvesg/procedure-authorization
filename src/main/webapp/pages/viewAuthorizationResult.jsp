@@ -16,6 +16,7 @@
 </head>
 <body>
 <div class="container">
+    <jsp:include page="../components/toast.jsp" />
     <div class="result-card">
         <div class="result-header ${authorization.status == 'APROVADO' ? 'approved' : 'denied'}">
             <div class="result-icon">

@@ -10,8 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "ProcedureRulesServlet", urlPatterns = {"/procedures"})
@@ -29,7 +27,7 @@ public class ProcedureRulesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
 
         String idParam = req.getParameter("id");
 
@@ -38,13 +36,9 @@ public class ProcedureRulesServlet extends HttpServlet {
                 Integer id = Integer.parseInt(idParam);
                 ProcedureRules rule = procedureService.findById(id);
 
-                if (rule != null) {
-                    req.setAttribute("procedureRule", rule);
-                    req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
-                } else {
-                    req.setAttribute("error", "Regra de procedimento não encontrada");
-                    req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-                }
+                req.setAttribute("procedureRule", rule);
+                req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
+
                 return;
             }
 
@@ -52,21 +46,14 @@ public class ProcedureRulesServlet extends HttpServlet {
             req.setAttribute("procedureRules", rules);
             req.getRequestDispatcher("/pages/listProcedure.jsp").forward(req, resp);
 
-        } catch (NumberFormatException e) {
-            log("ID inválido: " + idParam, e);
-            req.setAttribute("error", "ID inválido");
-            req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-
-        } catch (SQLException e) {
-            log("Erro ao listar regras de procedimentos", e);
-            req.setAttribute("error", "Erro ao carregar regras: " + e.getMessage());
-            req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
         try {
             ProcedureRules rule = extractProcedureRuleFromRequest(req);
             procedureService.createProcedure(rule);
@@ -74,35 +61,8 @@ public class ProcedureRulesServlet extends HttpServlet {
             req.getSession().setAttribute("successMessage", "Regra de procedimento criada com sucesso!");
             resp.sendRedirect(req.getContextPath() + "/procedures");
 
-        } catch (ProcedureService.ValidationException e) {
-            log("Erro de validação ao criar regra", e);
-            req.setAttribute("error", e.getMessage());
-            req.setAttribute("procedureRule", extractProcedureRuleFromRequest(req));
-            req.getRequestDispatcher("/pages/formProcedureRule.jsp").forward(req, resp);
-
-        } catch (SQLException e) {
-            log("Erro ao criar regra de procedimento", e);
-            req.setAttribute("error", "Erro ao salvar regra: " + e.getMessage());
-            req.setAttribute("procedureRule", extractProcedureRuleFromRequest(req));
-            req.getRequestDispatcher("/pages/formProcedureRule.jsp").forward(req, resp);
-        }
-    }
-
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        try {
-            String idParam = req.getParameter("id");
-
-            if (idParam == null || idParam.isBlank()) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID é obrigatório");
-                return;
-            }
-
-            Integer id = Integer.parseInt(idParam);
-            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido");
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
     }
 

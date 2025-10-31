@@ -31,7 +31,7 @@ public class AuthorizationRequestDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     authorizationRequest.setId(rs.getInt(1));
-                    authorizationRequest.setRequestDate(rs.getTimestamp(2).toLocalDateTime());
+                    authorizationRequest.setRequestDate(rs.getTimestamp(2));
                 }
             }
         }
@@ -102,7 +102,7 @@ public class AuthorizationRequestDAO {
         request.setPatientGender(rs.getString("patient_gender"));
         request.setStatus(rs.getString("status"));
         request.setJustification(rs.getString("justification"));
-        request.setRequestDate(rs.getTimestamp("request_date").toLocalDateTime());
+        request.setRequestDate(rs.getTimestamp("request_date"));
         return request;
     }
 }

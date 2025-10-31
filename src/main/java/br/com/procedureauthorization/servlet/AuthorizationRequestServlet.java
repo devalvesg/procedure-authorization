@@ -5,20 +5,22 @@ import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.services.AuthorizationService;
 import jakarta.servlet.ServletException;
+import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "AuthorizationRequestServlet", urlPatterns = {"/authorizations"})
 public class AuthorizationRequestServlet extends HttpServlet {
 
     private AuthorizationService authorizationService;
+    private final Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
@@ -30,7 +32,7 @@ public class AuthorizationRequestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
 
         String idParam = req.getParameter("id");
         String action = req.getParameter("action");
@@ -45,13 +47,8 @@ public class AuthorizationRequestServlet extends HttpServlet {
                 Integer id = Integer.parseInt(idParam);
                 AuthorizationRequest authorization = authorizationService.findById(id);
 
-                if (authorization != null) {
-                    req.setAttribute("authorization", authorization);
-                    req.getRequestDispatcher("/pages/viewAuthorization.jsp").forward(req, resp);
-                } else {
-                    req.setAttribute("error", "Autorização não encontrada");
-                    req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-                }
+                req.setAttribute("authorization", authorization);
+                req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
                 return;
             }
 
@@ -59,55 +56,33 @@ public class AuthorizationRequestServlet extends HttpServlet {
             req.setAttribute("authorizations", authorizations);
 
             req.getRequestDispatcher("/pages/listAuthorizations.jsp").forward(req, resp);
-
         } catch (Exception e) {
-            log("Erro ao processar requisição", e);
-            req.setAttribute("error", "Erro: " + e.getMessage());
-            req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
+            throw new ServletException(e);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
         try {
-            AuthorizationRequest authorization = extractAuthorizationFromRequest(req);
+            AuthorizationRequest authorization = extractAuthorizationFromJson(req);
+
             authorizationService.createAuthorization(authorization);
 
-            req.setAttribute("authorization", authorization);
-            req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
+            String jsonResponse = gson.toJson(authorization);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonResponse);
 
-        } catch (AuthorizationService.ValidationException e) {
-            log("Erro de validação ao criar autorização", e);
-            req.setAttribute("error", e.getMessage());
-            req.setAttribute("authorization", extractAuthorizationFromRequest(req));
-            req.getRequestDispatcher("/pages/formAuthorization.jsp").forward(req, resp);
-
-        } catch (SQLException e) {
-            log("Erro ao criar autorização", e);
-            req.setAttribute("error", "Erro ao salvar autorização: " + e.getMessage());
-            req.setAttribute("authorization", extractAuthorizationFromRequest(req));
-            req.getRequestDispatcher("/pages/formAuthorization.jsp").forward(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
     }
 
-    private AuthorizationRequest extractAuthorizationFromRequest(HttpServletRequest req) {
-        String procedureCode = req.getParameter("procedureCode");
-        String patientName = req.getParameter("patientName");
-        String patientAgeStr = req.getParameter("patientAge");
-        String patientGender = req.getParameter("patientGender");
-        String justification = req.getParameter("justification");
-
-        Integer patientAge = parseAge(patientAgeStr);
-
-        AuthorizationRequest authorization = new AuthorizationRequest();
-        authorization.setProcedureCode(procedureCode);
-        authorization.setPatientName(patientName);
-        authorization.setPatientAge(patientAge);
-        authorization.setPatientGender(patientGender != null ? patientGender.toUpperCase() : null);
-        authorization.setJustification(justification);
-
-        return authorization;
+    private AuthorizationRequest extractAuthorizationFromJson(HttpServletRequest req) throws IOException {
+        try (BufferedReader reader = req.getReader()) {
+            String json = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return gson.fromJson(json, AuthorizationRequest.class);
+        }
     }
 
     private Integer parseAge(String ageStr) {

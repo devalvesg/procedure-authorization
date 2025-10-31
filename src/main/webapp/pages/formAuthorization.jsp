@@ -15,6 +15,7 @@
 </head>
 <body>
 <div class="container">
+    <jsp:include page="../components/toast.jsp" />
     <c:if test="${not empty error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -143,7 +144,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="${pageContext.request.contextPath}/js/authorizationForm.js"></script>
 <script src="${pageContext.request.contextPath}/js/validation.js"></script>
 </body>
 </html>
