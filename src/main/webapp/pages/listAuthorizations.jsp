@@ -128,9 +128,9 @@
                                     <td class="text-center">
                                         <small class="text-muted">
                                             <i class="bi bi-calendar-event me-1"></i>
-                                            <fmt:formatDate value="${auth.requestDate}" pattern="dd/MM/yyyy" />
+                                            <fmt:formatDate value="${auth.requestDate}" pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
                                             <br>
-                                            <fmt:formatDate value="${auth.requestDate}" pattern="HH:mm" />
+                                            <fmt:formatDate value="${auth.requestDate}" pattern="HH:mm" timeZone="America/Sao_Paulo" />
                                         </small>
                                     </td>
                                     <td class="text-center">

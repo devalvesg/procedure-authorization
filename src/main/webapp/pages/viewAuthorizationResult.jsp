@@ -49,7 +49,7 @@
                 <small class="text-muted">
                     <i class="bi bi-calendar-event me-2"></i>
                     Solicitado em:
-                    <fmt:formatDate value="${authorization.requestDate}" pattern="dd/MM/yyyy 'às' HH:mm" />
+                    <fmt:formatDate value="${authorization.requestDate}" pattern="dd/MM/yyyy 'às' HH:mm" timeZone="America/Sao_Paulo"/>
                 </small>
             </div>
 
