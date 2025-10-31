@@ -1,17 +1,18 @@
 package br.com.procedureauthorization.services;
 
-import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
+import br.com.procedureauthorization.dao.contract.IAuthorizationRequestDAO;
 import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.AuthorizationRequest;
+import br.com.procedureauthorization.services.contract.IAuthorizationService;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class AuthorizationService {
+public class AuthorizationService implements IAuthorizationService {
 
-    private final AuthorizationRequestDAO authorizationRequestDAO;
+    private final IAuthorizationRequestDAO authorizationRequestDAO;
 
-    public AuthorizationService(AuthorizationRequestDAO authorizationRequestDAO) {
+    public AuthorizationService(IAuthorizationRequestDAO authorizationRequestDAO) {
         this.authorizationRequestDAO = authorizationRequestDAO;
     }
 

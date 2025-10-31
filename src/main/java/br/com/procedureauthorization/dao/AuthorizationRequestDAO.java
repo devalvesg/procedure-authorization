@@ -1,6 +1,7 @@
 package br.com.procedureauthorization.dao;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
+import br.com.procedureauthorization.config.contract.IDatabaseConfig;
 import br.com.procedureauthorization.dao.contract.IAuthorizationRequestDAO;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 
@@ -10,9 +11,9 @@ import java.util.List;
 
 public class AuthorizationRequestDAO implements IAuthorizationRequestDAO {
 
-    private final DatabaseConfig dbConfig;
+    private final IDatabaseConfig dbConfig;
 
-    public AuthorizationRequestDAO(DatabaseConfig dbConfig) {
+    public AuthorizationRequestDAO(IDatabaseConfig dbConfig) {
         this.dbConfig = dbConfig;
     }
 

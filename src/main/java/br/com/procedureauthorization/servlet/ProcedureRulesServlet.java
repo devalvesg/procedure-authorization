@@ -1,9 +1,12 @@
 package br.com.procedureauthorization.servlet;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
+import br.com.procedureauthorization.config.contract.IDatabaseConfig;
 import br.com.procedureauthorization.dao.ProcedureRulesDAO;
+import br.com.procedureauthorization.dao.contract.IProcedureRulesDAO;
 import br.com.procedureauthorization.models.ProcedureRules;
 import br.com.procedureauthorization.services.ProcedureService;
+import br.com.procedureauthorization.services.contract.IProcedureService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,13 +18,13 @@ import java.util.List;
 @WebServlet(name = "ProcedureRulesServlet", urlPatterns = {"/procedures"})
 public class ProcedureRulesServlet extends HttpServlet {
 
-    private ProcedureService procedureService;
+    private IProcedureService procedureService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        ProcedureRulesDAO procedureRulesDAO = new ProcedureRulesDAO(dbConfig);
+        IDatabaseConfig dbConfig = new DatabaseConfig();
+        IProcedureRulesDAO procedureRulesDAO = new ProcedureRulesDAO(dbConfig);
         this.procedureService = new ProcedureService(procedureRulesDAO);
     }
 

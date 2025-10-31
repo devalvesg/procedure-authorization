@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="container">
-    <jsp:include page="../components/toast.jsp" />
+    <jsp:include page="../components/toast.jsp"/>
     <c:if test="${not empty error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -35,7 +35,8 @@
         <div class="card-body p-4">
             <div class="info-box">
                 <i class="bi bi-info-circle me-2"></i>
-                <strong>Atenção:</strong> A autorização será validada automaticamente com base nas regras cadastradas (código do procedimento, idade e sexo do paciente).
+                <strong>Atenção:</strong> A autorização será validada automaticamente com base nas regras cadastradas
+                (código do procedimento, idade e sexo do paciente).
             </div>
 
             <form method="POST" action="${pageContext.request.contextPath}/authorizations" id="authorizationForm">
@@ -119,9 +120,14 @@
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="${pageContext.request.contextPath}/procedures" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Ver Regras
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="${pageContext.request.contextPath}/procedures" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Ver Regras
+                        </a>
+                        <a href="${pageContext.request.contextPath}/authorizations" class="btn btn-secondary">
+                            <i class="bi bi-card-list me-2"></i>Visualizar Solicitações
+                        </a>
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-circle me-2"></i>Solicitar Autorização
                     </button>

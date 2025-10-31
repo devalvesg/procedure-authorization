@@ -1,9 +1,12 @@
 package br.com.procedureauthorization.servlet;
 
 import br.com.procedureauthorization.config.DatabaseConfig;
+import br.com.procedureauthorization.config.contract.IDatabaseConfig;
 import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
+import br.com.procedureauthorization.dao.contract.IAuthorizationRequestDAO;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.services.AuthorizationService;
+import br.com.procedureauthorization.services.contract.IAuthorizationService;
 import jakarta.servlet.ServletException;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,14 +22,14 @@ import java.util.stream.Collectors;
 @WebServlet(name = "AuthorizationRequestServlet", urlPatterns = {"/authorizations"})
 public class AuthorizationRequestServlet extends HttpServlet {
 
-    private AuthorizationService authorizationService;
+    private IAuthorizationService authorizationService;
     private final Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
         super.init();
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        AuthorizationRequestDAO authorizationRequestDAO = new AuthorizationRequestDAO(dbConfig);
+        IDatabaseConfig dbConfig = new DatabaseConfig();
+        IAuthorizationRequestDAO authorizationRequestDAO = new AuthorizationRequestDAO(dbConfig);
         this.authorizationService = new AuthorizationService(authorizationRequestDAO);
     }
 

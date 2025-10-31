@@ -1,17 +1,19 @@
 package br.com.procedureauthorization.services;
 
 import br.com.procedureauthorization.dao.ProcedureRulesDAO;
+import br.com.procedureauthorization.dao.contract.IProcedureRulesDAO;
 import br.com.procedureauthorization.exception.BusinessException;
 import br.com.procedureauthorization.models.ProcedureRules;
+import br.com.procedureauthorization.services.contract.IProcedureService;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class ProcedureService {
+public class ProcedureService implements IProcedureService {
 
-    private final ProcedureRulesDAO procedureRulesDAO;
+    private final IProcedureRulesDAO procedureRulesDAO;
 
-    public ProcedureService(ProcedureRulesDAO procedureRulesDAO) {
+    public ProcedureService(IProcedureRulesDAO procedureRulesDAO) {
         this.procedureRulesDAO = procedureRulesDAO;
     }
 
