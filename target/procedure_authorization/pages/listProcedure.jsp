@@ -14,6 +14,7 @@
 </head>
 <body>
 <div class="container">
+    <jsp:include page="../components/toast.jsp" />
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
@@ -32,7 +33,7 @@
                     </h3>
                     <small>Critérios de autorização por procedimento, idade e sexo</small>
                 </div>
-                <a href="${pageContext.request.contextPath}/authorizations" class="btn btn-light">
+                <a href="${pageContext.request.contextPath}/authorizations?action=new" class="btn btn-light">
                     <i class="bi bi-plus-circle me-2"></i>
                     Nova Solicitação
                 </a>

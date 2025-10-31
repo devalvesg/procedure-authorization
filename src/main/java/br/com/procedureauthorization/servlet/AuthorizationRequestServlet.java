@@ -43,7 +43,7 @@ public class AuthorizationRequestServlet extends HttpServlet {
                 AuthorizationRequest authorization = authorizationService.findById(id);
 
                 req.setAttribute("authorization", authorization);
-                req.getRequestDispatcher("/pages/viewAuthorization.jsp").forward(req, resp);
+                req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
                 return;
             }
 

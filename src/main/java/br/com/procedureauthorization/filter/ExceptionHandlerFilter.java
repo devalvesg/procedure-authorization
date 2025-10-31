@@ -45,13 +45,12 @@ public class ExceptionHandlerFilter implements Filter {
                                          HttpServletResponse response,
                                          BusinessException e) throws ServletException, IOException {
 
-        LOGGER.log(Level.WARNING, "⚠️ Erro de validação: {0} - URI: {1} - Method: {2}",
+        LOGGER.log(Level.WARNING, "Erro de validação: {0} - URI: {1} - Method: {2}",
                 new Object[]{e.getMessage(), request.getRequestURI(), request.getMethod()});
 
         request.setAttribute("errorMessage", e.getMessage());
 
         String targetPage = determineTargetPage(request);
-        LOGGER.log(Level.INFO, "📄 Redirecionando para: {0}", targetPage);
 
         request.getRequestDispatcher(targetPage).forward(request, response);
     }
@@ -63,7 +62,7 @@ public class ExceptionHandlerFilter implements Filter {
         String errorId = generateErrorId();
 
         LOGGER.log(Level.SEVERE,
-                String.format("❌ ERRO INESPERADO [ID: %s] - URI: %s - Method: %s - User: %s",
+                String.format("ERRO INESPERADO [ID: %s] - URI: %s - Method: %s - User: %s",
                         errorId,
                         request.getRequestURI(),
                         request.getMethod(),
@@ -83,7 +82,7 @@ public class ExceptionHandlerFilter implements Filter {
     private String determineTargetPage(HttpServletRequest request) {
         String errorPage = (String) request.getAttribute("errorPage");
         if (errorPage != null && !errorPage.isEmpty()) {
-            LOGGER.log(Level.FINE, "✅ Usando errorPage definido pelo servlet: {0}", errorPage);
+            LOGGER.log(Level.FINE, "Usando errorPage definido pelo servlet: {0}", errorPage);
             return errorPage;
         }
 
@@ -102,7 +101,7 @@ public class ExceptionHandlerFilter implements Filter {
                     }
 
                     if (path.endsWith(".jsp")) {
-                        LOGGER.log(Level.FINE, "✅ Usando Referer: {0}", path);
+                        LOGGER.log(Level.FINE, "Usando Referer: {0}", path);
                         return path;
                     }
                 }

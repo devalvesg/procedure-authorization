@@ -15,6 +15,7 @@
 </head>
 <body>
 <div class="container">
+    <jsp:include page="../components/toast.jsp" />
     <c:if test="${not empty error}">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
