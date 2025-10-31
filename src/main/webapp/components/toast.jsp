@@ -1,15 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%-- DEBUG - Remova depois --%>
-<div style="background: yellow; padding: 10px; margin: 10px;">
-    <strong>DEBUG:</strong><br>
-    unexpectedError (request): ${requestScope.unexpectedError}<br>
-    errorId (request): ${requestScope.errorId}<br>
-    errorMessage (request): ${requestScope.errorMessage}<br>
-    successMessage (session): ${sessionScope.successMessage}
-</div>
-
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999">
 
     <c:if test="${not empty sessionScope.successMessage}">

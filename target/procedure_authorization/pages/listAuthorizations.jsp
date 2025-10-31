@@ -108,12 +108,12 @@
                                     </td>
                                     <td class="text-center">
                                         <c:choose>
-                                            <c:when test="${auth.status == 'APPROVED'}">
+                                            <c:when test="${auth.status == 'APROVADO'}">
                                                 <span class="badge badge-approved">
                                                     <i class="bi bi-check-circle me-1"></i>APROVADO
                                                 </span>
                                             </c:when>
-                                            <c:when test="${auth.status == 'DENIED'}">
+                                            <c:when test="${auth.status == 'NEGADO'}">
                                                 <span class="badge badge-denied">
                                                     <i class="bi bi-x-circle me-1"></i>NEGADO
                                                 </span>

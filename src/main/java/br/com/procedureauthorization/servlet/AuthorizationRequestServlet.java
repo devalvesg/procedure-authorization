@@ -5,17 +5,22 @@ import br.com.procedureauthorization.dao.AuthorizationRequestDAO;
 import br.com.procedureauthorization.models.AuthorizationRequest;
 import br.com.procedureauthorization.services.AuthorizationService;
 import jakarta.servlet.ServletException;
+import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "AuthorizationRequestServlet", urlPatterns = {"/authorizations"})
 public class AuthorizationRequestServlet extends HttpServlet {
 
     private AuthorizationService authorizationService;
+    private final Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
@@ -60,34 +65,24 @@ public class AuthorizationRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException {
         try {
-            AuthorizationRequest authorization = extractAuthorizationFromRequest(req);
+            AuthorizationRequest authorization = extractAuthorizationFromJson(req);
+
             authorizationService.createAuthorization(authorization);
 
-            req.setAttribute("authorization", authorization);
-            req.getRequestDispatcher("/pages/viewAuthorizationResult.jsp").forward(req, resp);
+            String jsonResponse = gson.toJson(authorization);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonResponse);
 
         } catch (Exception e) {
             throw new ServletException(e);
         }
     }
 
-    private AuthorizationRequest extractAuthorizationFromRequest(HttpServletRequest req) {
-        String procedureCode = req.getParameter("procedureCode");
-        String patientName = req.getParameter("patientName");
-        String patientAgeStr = req.getParameter("patientAge");
-        String patientGender = req.getParameter("patientGender");
-        String justification = req.getParameter("justification");
-
-        Integer patientAge = parseAge(patientAgeStr);
-
-        AuthorizationRequest authorization = new AuthorizationRequest();
-        authorization.setProcedureCode(procedureCode);
-        authorization.setPatientName(patientName);
-        authorization.setPatientAge(patientAge);
-        authorization.setPatientGender(patientGender != null ? patientGender.toUpperCase() : null);
-        authorization.setJustification(justification);
-
-        return authorization;
+    private AuthorizationRequest extractAuthorizationFromJson(HttpServletRequest req) throws IOException {
+        try (BufferedReader reader = req.getReader()) {
+            String json = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return gson.fromJson(json, AuthorizationRequest.class);
+        }
     }
 
     private Integer parseAge(String ageStr) {

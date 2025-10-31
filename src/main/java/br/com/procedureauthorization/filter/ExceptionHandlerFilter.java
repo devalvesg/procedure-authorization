@@ -48,10 +48,16 @@ public class ExceptionHandlerFilter implements Filter {
         LOGGER.log(Level.WARNING, "Erro de validação: {0} - URI: {1} - Method: {2}",
                 new Object[]{e.getMessage(), request.getRequestURI(), request.getMethod()});
 
+        if (isAjaxRequest(request)) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"type\": \"business\", \"message\": \"" + e.getMessage() + "\"}");
+            return;
+        }
+
         request.setAttribute("errorMessage", e.getMessage());
-
         String targetPage = determineTargetPage(request);
-
         request.getRequestDispatcher(targetPage).forward(request, response);
     }
 
@@ -72,11 +78,13 @@ public class ExceptionHandlerFilter implements Filter {
         request.setAttribute("unexpectedError",
                 "Um erro inesperado ocorreu. Por favor, contate o suporte informando o código: " + errorId);
         request.setAttribute("errorId", errorId);
-
         String targetPage = determineTargetPage(request);
-        LOGGER.log(Level.INFO, "📄 Redirecionando para: {0}", targetPage);
-
         request.getRequestDispatcher(targetPage).forward(request, response);
+    }
+
+    private boolean isAjaxRequest(HttpServletRequest request) {
+        String requestedWith = request.getHeader("X-Requested-With");
+        return "XMLHttpRequest".equalsIgnoreCase(requestedWith);
     }
 
     private String determineTargetPage(HttpServletRequest request) {
